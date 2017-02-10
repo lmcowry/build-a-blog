@@ -1,31 +1,91 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>/ascii/</title>
+</head>
 
-{% block content %}
-<h2>Movies I Want to Watch:</h2>
+<style type="text/css">
+    body {
+        font-family: sans-serif;
+        width: 800px;
+        margin: 0 auto;
+        padding: 10px;
+    }
 
-<ul>
-{% for movie in movies %}
-    <li>
-        <form action="/watched-it" method="post">
-            {{ movie.title }}
-            <input type="hidden" name="watched-movie" value="{{ movie.key().id() }}"/>
-            <input type="submit" value="I Watched It!"/>
-        </form>
-        <form action="/deleteit" method="post">
-            <input type="hidden" name="delete-this-movie" value="{{ movie.key().id() }}"/>
-            <input type="submit" name="delete-movie" value="Delete it, please"/>
-        </form>
-    </li>
-{% endfor %}
-</ul>
+    .error {
+        color: red;
+    }
 
-<form action="/add" method="post">
-    <label>
-        I also want to watch
-        <input type="text" name="new-movie"/>
-    </label>
-    <input type="submit" value="Add it to My List"/>
-</form>
+    label {
+        display: block;
+        font-size: 20px;
+    }
 
-<p class="error">{{ error if error else "" }}</p>
-{% endblock %}
+    input[type=text] {
+        width: 400px;
+        font-size: 20px;
+        padding: 2px;
+    }
+
+    textarea {
+        width: 400px;
+        height: 200px;
+        font-size: 17px;
+        font-family: monospace;
+    }
+
+    input[type=submit] {
+        font-size: 24px;
+    }
+
+    hr {
+        margin: 20px auto;
+    }
+
+    .art + .art {
+        margin-top: 20px;
+    }
+
+    .art-title {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .art-body {
+        margin: 0;
+        font-size: 17px;
+    }
+
+</style>
+
+<body>
+    <h1>/ascii/</h1>
+
+    <form method="post">
+        <label>
+            <div>title</div>
+            <input type="text" name="title" value="{{title}}">
+        </label>
+
+        <label>
+            <div>art</div>
+            <textarea name="art">{{art}}</textarea>
+        </label>
+
+        <div class="error">{{error}}</div>
+
+        <input type="submit">
+
+    </form>
+
+    <hr>
+
+    {% for art in arts %}
+        <div class="art">
+            <div class="art-title">{{art.title}}</div>
+            <pre class=""art-body">{{art.art}}</pre>
+        </div>
+    {% endfor %}
+
+</body>
+</html>
