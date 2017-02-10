@@ -47,7 +47,6 @@ class MainPage(Handler):
         blogs = db.GqlQuery("SELECT * FROM blogEntry ORDER BY created DESC LIMIT 5")
         self.render("frontpage5.html", title=title, theText=theText, error=error, blogs=blogs)
 
-
     def get(self):
         self.render_front()
 
@@ -65,6 +64,28 @@ class MainPage(Handler):
             error = "we need to both a title and some text!"
             self.render_front(title, theText, error)
 
+class newPost(Handler):
+    def render_newPost(self, title="", theText="", error=""):
+        self.render("newpost.html", title=title, theText=theText, error=error)
+
+    def get(self):
+        self.render_newPost()
+
+    def post(self):
+        title = self.request.get("title")
+        theText = self.request.get("theText")
+
+        if title and theText:
+            a = blogEntry(title = title, theText = theText)
+            a.put()
+
+            self.redirect("/blog")
+
+        else:
+            error = "we need to both a title and some text!"
+            self.render_newPost(title, theText, error)
+
 app = webapp2.WSGIApplication([
-    ('/blog', MainPage)
+    ('/blog', MainPage),
+    ('/blog/newpost', newPost)
 ], debug=True)

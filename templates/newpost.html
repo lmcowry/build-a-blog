@@ -3,6 +3,21 @@
 
 {% block content %}
 
+<form method="post">
+    <label>
+        <div>title</div>
+        <input type="text" name="title" value="{{title}}">
+    </label>
 
+    <label>
+        <div>theText</div>
+        <textarea name="theText">{{theText}}</textarea>
+    </label>
+
+    <div class="error">{{error}}</div>
+
+    <input type="submit">
+
+</form>
 
 {% endblock %}
