@@ -35,17 +35,17 @@ class Handler(webapp2.RequestHandler):
         self.write(self.render_str(template, **kw))
 
 
-class Art(db.Model):
-    # if we give art without a title, it'll not allow it because we're requiring it
+class blogEntry(db.Model):
+    # if we give blogEntry without a title, it'll not allow it because we're requiring it
     title = db.StringProperty(required = True)
-    art = db.TextProperty(required = True)
+    theText = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
 
 
 class MainPage(Handler):
-    def render_front(self, title="", art="", error=""):
-        arts = db.GqlQuery("SELECT * FROM Art ORDER BY created DESC")
-        self.render("front.html", title=title, art=art, error=error, arts=arts)
+    def render_front(self, title="", theText="", error=""):
+        blogs = db.GqlQuery("SELECT * FROM blogEntry ORDER BY created DESC LIMIT 5")
+        self.render("front.html", title=title, theText=theText, error=error, blogs=blogs)
 
 
     def get(self):
@@ -53,17 +53,17 @@ class MainPage(Handler):
 
     def post(self):
         title = self.request.get("title")
-        art = self.request.get("art")
+        theText = self.request.get("theText")
 
-        if title and art:
-            a = Art(title = title, art = art)
+        if title and theText:
+            a = blogEntry(title = title, theText = theText)
             a.put()
 
-            self.redirect("/")
+            self.redirect("/blog")
 
         else:
-            error = "we need to both a title and some artwork!"
-            self.render_front(title, art, error)
+            error = "we need to both a title and some text!"
+            self.render_front(title, theText, error)
 
 app = webapp2.WSGIApplication([
     ('/blog', MainPage)
