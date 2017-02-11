@@ -50,19 +50,6 @@ class MainPage(Handler):
     def get(self):
         self.render_front()
 
-    def post(self):
-        title = self.request.get("title")
-        theText = self.request.get("theText")
-
-        if title and theText:
-            a = blogEntry(title = title, theText = theText)
-            a.put()
-
-            self.redirect("/blog")
-
-        else:
-            error = "we need to both a title and some text!"
-            self.render_front(title, theText, error)
 
 class newPost(Handler):
     def render_newPost(self, title="", theText="", error=""):
