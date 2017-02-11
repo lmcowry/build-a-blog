@@ -8,7 +8,7 @@
     {% for aBlogEntry in blogs %}
 
         <div class="aBlogEntry">
-            <div class="blog-title"><a href={{"/blog/" ~ (aBlogEntry.key().id())}}>aBlog.entry>{{aBlogEntry.title}}</a></div>
+            <div class="blog-title"><a href={{"/blog/" ~ (aBlogEntry.key().id())}}>{{aBlogEntry.title}}</a></div>
             <pre class="blog-body">{{aBlogEntry.theText}}</pre>
         </div>
     {% endfor %}

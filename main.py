@@ -65,8 +65,9 @@ class newPost(Handler):
         if title and theText:
             a = blogEntry(title = title, theText = theText)
             a.put()
-
-            self.redirect("/blog")
+            entryNumberAsString = str(a.key().id())
+            entryLink = "/blog/" + entryNumberAsString
+            self.redirect(entryLink)
 
         else:
             error = "we need to both a title and some text!"
