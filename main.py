@@ -90,14 +90,15 @@ class ViewPostHandler(Handler):
         self.render("specificpost.html", title=title, theText=theText, error=error)
 
     def get(self, id):
-        # if blogEntry.get_by_id(id) == error:
-        #     #TODO error
         id = int(id)
-        thisParticularBlog = blogEntry.get_by_id(id)
-        title = thisParticularBlog.title
-        # need to add created date?
-        theText = thisParticularBlog.theText
-        self.render_specificPost(title, theText)
+        if blogEntry.get_by_id(id) == None:
+            self.render_specificPost(error="This is not a valid permalink")
+        else:
+            thisParticularBlog = blogEntry.get_by_id(id)
+            title = thisParticularBlog.title
+            # need to add created date?
+            theText = thisParticularBlog.theText
+            self.render_specificPost(title, theText)
 
 
 app = webapp2.WSGIApplication([
