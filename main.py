@@ -85,7 +85,23 @@ class newPost(Handler):
             error = "we need to both a title and some text!"
             self.render_newPost(title, theText, error)
 
+class ViewPostHandler(Handler):
+    def render_specificPost(self, title="", theText="", error=""):
+        self.render("specificpost.html", title=title, theText=theText, error=error)
+
+    def get(self, id):
+        # if blogEntry.get_by_id(id) == error:
+        #     #TODO error
+        id = int(id)
+        thisParticularBlog = blogEntry.get_by_id(id)
+        title = thisParticularBlog.title
+        # need to add created date?
+        theText = thisParticularBlog.theText
+        self.render_specificPost(title, theText)
+
+
 app = webapp2.WSGIApplication([
     ('/blog', MainPage),
+    webapp2.Route('/blog/<id:\d+>', ViewPostHandler),
     ('/blog/newpost', newPost)
 ], debug=True)
