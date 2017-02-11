@@ -23,6 +23,12 @@ from google.appengine.ext import db
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
+def get_posts(limit, offset):
+    theQuery = "SELECT * FROM blogEntry ORDER BY created DESC LIMIT {0} OFFSET {1}".format(limit, offset)
+    allEntries = db.GqlQuery(theQuery)
+    return allEntries
+
+
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
@@ -44,7 +50,8 @@ class blogEntry(db.Model):
 
 class MainPage(Handler):
     def render_front(self, title="", theText="", error=""):
-        blogs = db.GqlQuery("SELECT * FROM blogEntry ORDER BY created DESC LIMIT 5")
+        # blogs = db.GqlQuery("SELECT * FROM blogEntry ORDER BY created DESC LIMIT 5")
+        blogs = get_posts(5, 0)
         self.render("frontpage5.html", title=title, theText=theText, error=error, blogs=blogs)
 
     def get(self):
@@ -87,6 +94,10 @@ class ViewPostHandler(Handler):
             # need to add created date?
             theText = thisParticularBlog.theText
             self.render_specificPost(title, theText)
+
+
+
+
 
 
 app = webapp2.WSGIApplication([
