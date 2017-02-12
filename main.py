@@ -49,12 +49,49 @@ class blogEntry(db.Model):
 
 
 class MainPage(Handler):
-    def render_front(self, title="", theText="", error=""):
+    def render_front(self, error="", page=1):
         # blogs = db.GqlQuery("SELECT * FROM blogEntry ORDER BY created DESC LIMIT 5")
-        blogs = get_posts(5, 0)
-        self.render("frontpage5.html", title=title, theText=theText, error=error, blogs=blogs)
+        pageNum = 0
+        if not (self.request.get('page')):
+            pageNum = 1
+        else:
+            pageNum = self.request.get('page')
+        howManyPostsPerPage = 5
+        pageNum = int(pageNum)
+        theOffset = pageNum * 5 - 5
+        blogs = get_posts(howManyPostsPerPage, theOffset)
+        totalBlogs = blogs.count()
+        currentLastBlog = pageNum * 5
+        pageBehind = False
+        pageAhead = False
+        nextPage = 0
+        prevPage = 0
+        if pageNum > 1:
+            pageBehind = True
+            prevPage = pageNum - 1
+        if totalBlogs > currentLastBlog:
+            pageAhead = True
+            nextPage = pageNum + 1
+
+        #check for pages behind.  if it exists, add a string of html
+
+        #check for pages ahead
+
+        # self.response.out.write(blogs.count(offset=originalOffset, limit=howManyPostsPerPage))
+        # self.response.out.write(blogs.count())
+
+
+        # pagesBehind
+        # pagesAhead
+        #
+        # if pagesBehind:
+        #     pagesBack = "< previous"
+        #
+        self.render("frontpage5.html", error=error, blogs=blogs, pageBehind=pageBehind, pageAhead=pageAhead, prevPage=prevPage, nextPage=nextPage)
+
 
     def get(self):
+
         self.render_front()
 
 

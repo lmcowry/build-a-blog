@@ -13,7 +13,16 @@
         </div>
     {% endfor %}
 
-<!-- need to add if statement for if the next page exists -->
-    <a href={{nextPage}}>next &gt;</a>
+
+    {% if pageBehind %}
+    <a href={{"/blog?page=" ~ prevPage}}>&lt; previous</a>
+    {% endif %}
+    {% if pageBehind and pageAhead %}
+    &nbsp;&nbsp; | &nbsp;&nbsp;
+    {% endif %}
+    {% if pageAhead %}
+    <a href={{"/blog?page=" ~ nextPage}}>next &gt;</a>
+    {% endif %}
+
 
 {% endblock %}
